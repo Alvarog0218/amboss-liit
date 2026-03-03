@@ -1,0 +1,203 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Simulador de Proyectos | LIIT x AMBOSS</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Anta&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body class="simulator-page">
+
+    <!-- Neutral Header -->
+    <header class="simulator-header">
+        <a href="index.html" class="back-link">← Volver al Inicio</a>
+        <div class="combined-logo">LIIT <span>x</span> AMBOSS</div>
+        <div class="header-subtitle">Simulador de Construcción y Diseño</div>
+    </header>
+
+    <main class="simulator-layout">
+
+        <!-- Left Column: Controls -->
+        <section class="control-panel">
+
+            <div class="step-indicator" id="step-indicator">Paso 1 de 4</div>
+
+            <!-- STEP 1: Type of Project -->
+            <div class="step-container active-step" id="step-1">
+                <div class="sim-group">
+                    <h3 class="sim-title">1. Tipo de Proyecto</h3>
+                    <div class="options-grid project-types">
+                        <label class="sim-card">
+                            <input type="radio" name="projectType" value="residencial" checked>
+                            <div class="card-content">
+                                <h4>Residencial</h4>
+                                <p>Casas, Apartamentos</p>
+                            </div>
+                        </label>
+                        <label class="sim-card">
+                            <input type="radio" name="projectType" value="comercial">
+                            <div class="card-content">
+                                <h4>Comercial</h4>
+                                <p>Locales, Oficinas</p>
+                            </div>
+                        </label>
+                        <label class="sim-card">
+                            <input type="radio" name="projectType" value="industrial">
+                            <div class="card-content">
+                                <h4>Industrial</h4>
+                                <p>Bodegas, Plantas</p>
+                            </div>
+                        </label>
+                    </div>
+                </div>
+            </div>
+
+            <!-- STEP 2: Square Footage Area -->
+            <div class="step-container" id="step-2">
+                <div class="sim-group">
+                    <h3 class="sim-title">2. Área Total (m²)</h3>
+                    <div class="range-container">
+                        <input type="range" id="areaSlider" min="50" max="2000" value="150" step="10">
+                        <div class="range-value"><span id="areaDisplay">150</span> m²</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- STEP 3: Materials & Finishes -->
+            <div class="step-container" id="step-3">
+                <div class="sim-group">
+                    <h3 class="sim-title">3. Calidad de Acabados & Materiales</h3>
+                    <div class="options-grid finish-types">
+                        <label class="sim-card">
+                            <input type="radio" name="finishQuality" value="standard" checked>
+                            <div class="card-content">
+                                <h4>Estándar</h4>
+                                <p>Materiales funcionales y duraderos (AMBOSS Core)</p>
+                            </div>
+                        </label>
+                        <label class="sim-card">
+                            <input type="radio" name="finishQuality" value="premium">
+                            <div class="card-content">
+                                <h4>Premium</h4>
+                                <p>Equilibrio entre diseño e ingeniería</p>
+                            </div>
+                        </label>
+                        <label class="sim-card">
+                            <input type="radio" name="finishQuality" value="luxury">
+                            <div class="card-content">
+                                <h4>Vanguardista</h4>
+                                <p>Acabados disruptivos y experimentales (LIIT Core)</p>
+                            </div>
+                        </label>
+                    </div>
+                </div>
+            </div>
+
+            <!-- STEP 4: Special Add-ons -->
+            <div class="step-container" id="step-4">
+                <div class="sim-group">
+                    <h3 class="sim-title">4. Especialidades & Diseño Adicional</h3>
+                    <div class="toggle-list">
+                        <label class="toggle-item">
+                            <div class="toggle-info">
+                                <h4>Domótica Smart Home</h4>
+                                <p>Integración tecnológica integral.</p>
+                            </div>
+                            <div class="toggle-switch">
+                                <input type="checkbox" id="addon-smart">
+                                <span class="slider round"></span>
+                            </div>
+                        </label>
+                        <label class="toggle-item">
+                            <div class="toggle-info">
+                                <h4>Sostenibilidad (Paneles Solares)</h4>
+                                <p>Energía verde y certificación LEED.</p>
+                            </div>
+                            <div class="toggle-switch">
+                                <input type="checkbox" id="addon-eco">
+                                <span class="slider round"></span>
+                            </div>
+                        </label>
+                        <label class="toggle-item">
+                            <div class="toggle-info">
+                                <h4>Paisajismo Premium</h4>
+                                <p>Diseño de exteriores y jardines conceptuales.</p>
+                            </div>
+                            <div class="toggle-switch">
+                                <input type="checkbox" id="addon-landscape">
+                                <span class="slider round"></span>
+                            </div>
+                        </label>
+                        <label class="toggle-item">
+                            <div class="toggle-info">
+                                <h4>Interiorismo a la Medida</h4>
+                                <p>Diseño de mobiliario e iluminación (LIIT Studio).</p>
+                            </div>
+                            <div class="toggle-switch">
+                                <input type="checkbox" id="addon-interior">
+                                <span class="slider round"></span>
+                            </div>
+                        </label>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Navigation Controls -->
+            <div class="step-navigation">
+                <button type="button" class="btn btn-secondary" id="prev-btn" style="display: none;">Anterior</button>
+                <button type="button" class="btn btn-primary" id="next-btn">Siguiente</button>
+            </div>
+
+        </section>
+
+        <!-- Right Column: Summary Panel -->
+        <aside class="summary-panel-wrapper">
+            <div class="summary-panel">
+                <h2>Costo Estimado</h2>
+                <div class="price-display" id="totalPrice">$0</div>
+                <div class="currency-note">* Valores de referencia aproximados en COP</div>
+
+                <div class="summary-breakdown">
+                    <div class="breakdown-row">
+                        <span>Proyecto:</span>
+                        <span id="summary-project-type">Residencial</span>
+                    </div>
+                    <div class="breakdown-row">
+                        <span>Área:</span>
+                        <span id="summary-area">150 m²</span>
+                    </div>
+                    <div class="breakdown-row">
+                        <span>Acabados:</span>
+                        <span id="summary-finish">Estándar</span>
+                    </div>
+                    <div class="breakdown-row divider"></div>
+                    <div class="breakdown-row">
+                        <span>Costo Construcción Básica:</span>
+                        <span id="summary-base-cost">$0</span>
+                    </div>
+                    <div class="breakdown-row">
+                        <span>Adicionales (Diseño/Tech):</span>
+                        <span id="summary-addons-cost">$0</span>
+                    </div>
+                </div>
+
+                <a href="https://wa.me/573157060211" target="_blank" class="btn btn-quote">Solicitar Cotización por
+                    WhatsApp</a>
+            </div>
+        </aside>
+
+    </main>
+
+    <footer class="global-footer neutral-footer">
+        <p>&copy; 2026 LIIT / AMBOSS. Cálculos basados en tarifas estimadas del mercado de construcción colombiano.</p>
+    </footer>
+
+    <script src="simulator.js"></script>
+</body>
+
+</html>
