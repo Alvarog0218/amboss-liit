@@ -1,0 +1,982 @@
+/* ============================================================
+   TOKENS — Design System Variables
+   ============================================================ */
+:root {
+  --font-anta: 'Anta', sans-serif;
+
+  /* LIIT Brand */
+  --liit-primary: #4d1f2e;
+  --liit-secondary: #364d63;
+  --liit-accent: #465037;
+
+  /* AMBOSS Brand */
+  --amboss-black: #000000;
+  --amboss-green: #1ee36f;
+
+  /* Neutrals */
+  --text-light: #ffffff;
+  --text-dark: #1a1a1a;
+
+  /* Transitions */
+  --t-panel: 0.65s;
+  --t-ease: cubic-bezier(0.76, 0, 0.24, 1);
+  --t-fade: 0.4s ease;
+
+  /* Safe areas (PWA / notched phones) */
+  --safe-top: env(safe-area-inset-top, 0px);
+  --safe-bottom: env(safe-area-inset-bottom, 0px);
+  --safe-left: env(safe-area-inset-left, 0px);
+  --safe-right: env(safe-area-inset-right, 0px);
+}
+
+/* ============================================================
+   RESET
+   ============================================================ */
+*, *::before, *::after {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+/* ============================================================
+   BASE
+   ============================================================ */
+html {
+  scroll-behavior: smooth;
+  /* Mobile: no snap (better UX on touch) */
+  scroll-snap-type: none;
+  -webkit-text-size-adjust: 100%;
+}
+
+body {
+  font-family: var(--font-anta);
+  background-color: #111;
+  color: var(--text-light);
+  overflow-x: hidden;
+  overflow-y: auto;
+  /* Safe-area padding for notched phones */
+  padding-bottom: var(--safe-bottom);
+}
+
+img {
+  display: block;
+  max-width: 100%;
+}
+
+/* ============================================================
+   GLOBAL NAVIGATION — Mobile First
+   ============================================================ */
+
+/* Mobile: top bar with logo + hamburger */
+.global-nav {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  z-index: 100;
+  padding: calc(1rem + var(--safe-top)) 1.25rem 1rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background: rgba(0, 0, 0, 0.4);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+/* Mobile brand logo (only shown on mobile) */
+.nav-brand {
+  font-size: 1.1rem;
+  font-weight: bold;
+  letter-spacing: 4px;
+  color: var(--amboss-green);
+  text-decoration: none;
+}
+
+/* Desktop nav links (hidden on mobile) */
+.nav-links {
+  display: none;
+  list-style: none;
+  gap: 3rem;
+}
+
+.nav-links a {
+  color: #fff;
+  text-decoration: none;
+  font-size: 0.85rem;
+  letter-spacing: 3px;
+  text-transform: uppercase;
+  padding-bottom: 4px;
+  transition: opacity 0.3s;
+  position: relative;
+}
+
+.nav-links a::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 0;
+  height: 1px;
+  background: var(--amboss-green);
+  transition: width 0.3s ease;
+}
+
+.nav-links a:hover { opacity: 0.7; }
+.nav-links a:hover::after { width: 100%; }
+
+/* Hamburger button */
+.nav-toggle {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 5px;
+  width: 36px;
+  height: 36px;
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  padding: 4px;
+  border-radius: 4px;
+  transition: opacity 0.2s;
+}
+
+.nav-toggle span {
+  display: block;
+  width: 100%;
+  height: 1.5px;
+  background: #fff;
+  border-radius: 2px;
+  transition: transform 0.3s ease, opacity 0.3s ease;
+  transform-origin: center;
+}
+
+/* Hamburger → X animation */
+.nav-toggle[aria-expanded="true"] span:nth-child(1) {
+  transform: translateY(6.5px) rotate(45deg);
+}
+.nav-toggle[aria-expanded="true"] span:nth-child(2) {
+  opacity: 0;
+  transform: scaleX(0);
+}
+.nav-toggle[aria-expanded="true"] span:nth-child(3) {
+  transform: translateY(-6.5px) rotate(-45deg);
+}
+
+/* ============================================================
+   MOBILE MENU OVERLAY
+   ============================================================ */
+.nav-mobile {
+  position: fixed;
+  inset: 0;
+  z-index: 200;
+  background: rgba(5, 5, 5, 0.97);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  /* Hidden by default */
+  opacity: 0;
+  pointer-events: none;
+  transform: translateY(-8px);
+  transition: opacity 0.3s ease, transform 0.3s ease;
+}
+
+.nav-mobile.is-open {
+  opacity: 1;
+  pointer-events: auto;
+  transform: translateY(0);
+}
+
+.nav-close {
+  position: absolute;
+  top: calc(1.5rem + var(--safe-top));
+  right: 1.5rem;
+  background: transparent;
+  border: none;
+  color: rgba(255, 255, 255, 0.6);
+  font-size: 1.4rem;
+  cursor: pointer;
+  padding: 0.5rem;
+  transition: color 0.2s;
+}
+
+.nav-close:hover { color: #fff; }
+
+.nav-mobile-links {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 2.5rem;
+  text-align: center;
+}
+
+.nav-mobile-links a {
+  color: rgba(255, 255, 255, 0.75);
+  text-decoration: none;
+  font-size: clamp(1.4rem, 5vw, 2rem);
+  letter-spacing: 5px;
+  text-transform: uppercase;
+  transition: color 0.25s ease;
+  display: block;
+}
+
+.nav-mobile-links a:hover { color: var(--amboss-green); }
+
+/* ============================================================
+   PAGE WRAPPER & SECTIONS — Mobile First
+   ============================================================ */
+.page-wrapper {
+  width: 100%;
+}
+
+/* Mobile: sections flow naturally */
+.split-section {
+  display: flex;
+  flex-direction: column; /* Stack panels vertically on mobile */
+  width: 100%;
+  min-height: 100svh;
+  position: relative;
+  overflow: hidden;
+}
+
+/* ============================================================
+   PANELS — Mobile First
+   ============================================================ */
+.panel {
+  flex: 1;
+  min-height: 100svh; /* Each panel full-height on mobile */
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+}
+
+/* Panel Backgrounds */
+.panel-bg {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  background-size: cover;
+  background-position: center;
+  transform: translateZ(0) scale(1.05);
+  filter: blur(2px);
+  will-change: transform;
+}
+
+/* Overlays */
+.panel-overlay {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  mix-blend-mode: multiply;
+  opacity: 0.8;
+}
+
+.liit-overlay {
+  background: linear-gradient(135deg, var(--liit-primary) 0%, var(--liit-secondary) 50%, var(--liit-accent) 100%);
+}
+
+.liit-overlay.heavy { opacity: 0.88; }
+
+.amboss-overlay {
+  background: linear-gradient(to right, rgba(0,0,0,0.5) 0%, rgba(0,0,0,0.88) 100%);
+}
+
+.amboss-overlay.heavy { background: rgba(0, 0, 0, 0.82); }
+
+/* Solid color panels */
+.liit-bg { background-color: var(--liit-primary); }
+.amboss-bg { background-color: var(--amboss-black); }
+
+/* ============================================================
+   DIVIDER — hidden on mobile, visible on desktop
+   ============================================================ */
+.split-divider {
+  display: none; /* Hidden on mobile */
+  position: absolute;
+  top: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 1px;
+  height: 100%;
+  z-index: 8;
+  flex-direction: column;
+  align-items: center;
+  pointer-events: none;
+  transition: opacity var(--t-fade);
+}
+
+.divider-line {
+  flex: 1;
+  width: 1px;
+  background: linear-gradient(to bottom,
+    transparent,
+    rgba(255,255,255,0.18) 20%,
+    rgba(255,255,255,0.18) 80%,
+    transparent);
+}
+
+.divider-badge {
+  padding: 0.9rem 0.7rem;
+  font-size: 0.7rem;
+  letter-spacing: 3px;
+  color: rgba(255,255,255,0.55);
+  background: rgba(10,10,10,0.7);
+  border: 1px solid rgba(255,255,255,0.12);
+  border-radius: 3px;
+  white-space: nowrap;
+  backdrop-filter: blur(6px);
+  -webkit-backdrop-filter: blur(6px);
+}
+
+/* ============================================================
+   BRAND IDENTITY — Mobile First
+   ============================================================ */
+.panel-brand-identity {
+  position: absolute;
+  z-index: 3;
+  display: flex;
+  flex-direction: column;
+  pointer-events: none;
+  transition: opacity var(--t-panel) var(--t-ease), transform var(--t-panel) var(--t-ease);
+}
+
+/* Mobile: bottom-center positioning */
+.brand-identity-left,
+.brand-identity-right {
+  bottom: 6rem;
+  left: 50%;
+  transform: translateX(-50%);
+  align-items: center;
+  text-align: center;
+  width: 90%;
+}
+
+.brand-eyebrow {
+  font-size: 0.7rem;
+  letter-spacing: 4px;
+  text-transform: uppercase;
+  opacity: 0.55;
+  margin-bottom: 0.6rem;
+}
+
+.amboss-eyebrow {
+  color: var(--amboss-green);
+  opacity: 0.7;
+}
+
+.panel-brand-name {
+  font-size: clamp(4rem, 15vw, 11rem);
+  font-weight: bold;
+  letter-spacing: 6px;
+  line-height: 1;
+  color: rgba(255,255,255,0.88);
+  text-transform: uppercase;
+}
+
+.amboss-brand-name { color: var(--amboss-green); }
+
+.brand-accent-line {
+  width: 50px;
+  height: 2px;
+  background: rgba(255,255,255,0.35);
+  margin: 1rem 0;
+  transition: width var(--t-fade);
+}
+
+.amboss-accent-line { background: var(--amboss-green); }
+
+.brand-descriptor {
+  font-size: 0.85rem;
+  letter-spacing: 3px;
+  text-transform: uppercase;
+  opacity: 0.6;
+}
+
+/* ============================================================
+   NOSOTROS — Panel inner content, Mobile First
+   ============================================================ */
+.panel-inner-content {
+  position: relative;
+  z-index: 2;
+  padding: 6rem 1.5rem 4rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  width: 100%;
+  max-width: 560px;
+  margin: 0 auto;
+  transition: opacity var(--t-panel) var(--t-ease), transform var(--t-panel) var(--t-ease);
+}
+
+.inner-brand-name {
+  font-size: clamp(2.5rem, 10vw, 8rem);
+  font-weight: bold;
+  letter-spacing: 6px;
+  line-height: 1;
+  margin: 0.4rem 0;
+  color: rgba(255,255,255,0.92);
+}
+
+.amboss-inner-name { color: var(--amboss-green); }
+
+.nosotros-line {
+  width: 70px;
+  margin: 1.2rem 0 2rem;
+}
+
+/* ============================================================
+   PROJECT CONTENT — Mobile First
+   ============================================================ */
+.panel-content {
+  position: relative;
+  z-index: 2;
+  width: 100%;
+  max-width: 600px;
+  padding: 6rem 1.25rem 3rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  transition: opacity var(--t-fade), transform var(--t-fade);
+}
+
+.project-brand-label {
+  font-size: clamp(1.5rem, 5vw, 2.5rem);
+  font-weight: bold;
+  letter-spacing: 5px;
+  color: rgba(255,255,255,0.25);
+  margin-bottom: 1.5rem;
+  align-self: flex-start;
+  text-transform: uppercase;
+  width: 100%;
+  text-align: left;
+}
+
+.amboss-project-label { color: rgba(30,227,111,0.3); }
+
+/* ============================================================
+   PROJECT GRID — Mobile First (single column → 2 columns)
+   ============================================================ */
+.project-grid {
+  display: flex;
+  flex-direction: column; /* Stack cards on mobile */
+  gap: 1rem;
+  width: 100%;
+}
+
+.project-card {
+  flex: 1;
+  position: relative;
+  border-radius: 10px;
+  overflow: hidden;
+  aspect-ratio: 4/3; /* Landscape on mobile */
+  cursor: pointer;
+}
+
+.project-card img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.5s var(--t-ease);
+}
+
+.project-card:hover img { transform: scale(1.06); }
+
+.card-info {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  padding: 1.25rem;
+  background: linear-gradient(transparent, rgba(0,0,0,0.88));
+  font-size: 0.95rem;
+  letter-spacing: 1px;
+}
+
+/* ============================================================
+   UNIFIED CONTENT (overlays)
+   ============================================================ */
+.unified-content {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 10;
+  text-align: center;
+  width: 100%;
+  max-width: 800px;
+  padding: 1.5rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  pointer-events: none;
+}
+
+.unified-content > * { pointer-events: auto; }
+
+.unified-top {
+  top: 10%;
+  transform: translate(-50%, 0);
+}
+
+.hero-tagline {
+  font-size: clamp(0.95rem, 3.5vw, 1.5rem);
+  line-height: 1.7;
+  opacity: 0.8;
+  margin-bottom: 2rem;
+  text-align: center;
+  max-width: 380px;
+}
+
+/* ============================================================
+   SCROLL INDICATOR
+   ============================================================ */
+.scroll-indicator {
+  position: absolute;
+  bottom: 6rem;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  opacity: 0.5;
+  animation: bounce 2.4s infinite;
+  z-index: 10;
+  pointer-events: none;
+}
+
+.scroll-indicator span {
+  font-size: 0.6rem;
+  letter-spacing: 3px;
+  margin-bottom: 10px;
+}
+
+.mouse {
+  width: 20px;
+  height: 30px;
+  border: 1.5px solid #fff;
+  border-radius: 10px;
+  position: relative;
+}
+
+.mouse::after {
+  content: '';
+  position: absolute;
+  top: 5px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 3px;
+  height: 6px;
+  background: #fff;
+  border-radius: 2px;
+  animation: scroll-dot 2.4s infinite;
+}
+
+@keyframes scroll-dot {
+  0%, 100% { opacity: 1; transform: translateX(-50%) translateY(0); }
+  50%       { opacity: 0.3; transform: translateX(-50%) translateY(7px); }
+}
+
+@keyframes bounce {
+  0%, 100% { transform: translate(-50%, 0); }
+  50%      { transform: translate(-50%, -6px); }
+}
+
+/* ============================================================
+   TYPOGRAPHY
+   ============================================================ */
+.section-title {
+  font-size: clamp(1.5rem, 6vw, 4rem);
+  line-height: 1.2;
+  margin-bottom: 1.5rem;
+  text-transform: uppercase;
+}
+
+.subtitle-small {
+  font-size: 0.95rem;
+  opacity: 0.7;
+  margin-bottom: 1.5rem;
+  line-height: 1.6;
+}
+
+.body-text {
+  font-size: 0.95rem;
+  line-height: 1.85;
+  margin-bottom: 1.25rem;
+  opacity: 0.85;
+  max-width: 420px;
+}
+
+/* ============================================================
+   BUTTONS
+   ============================================================ */
+.btn {
+  padding: 1rem 2rem;
+  text-decoration: none;
+  font-family: var(--font-anta);
+  font-size: 0.85rem;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  transition: all 0.28s ease;
+  border-radius: 50px;
+  border: 1px solid transparent;
+  cursor: pointer;
+  background: transparent;
+  display: inline-block;
+  white-space: nowrap;
+}
+
+.btn-unified {
+  color: #fff;
+  border: 1px solid rgba(255,255,255,0.4);
+  backdrop-filter: blur(4px);
+  -webkit-backdrop-filter: blur(4px);
+}
+
+.btn-unified:hover {
+  background: rgba(255,255,255,0.12);
+  border-color: rgba(255,255,255,0.7);
+  transform: translateY(-2px);
+}
+
+.btn-whatsapp {
+  background: #25D366;
+  color: #fff;
+  font-weight: bold;
+  font-size: 0.95rem;
+  padding: 1rem 2rem;
+  border-radius: 50px;
+  box-shadow: 0 8px 24px rgba(37,211,102,0.25);
+  border: none;
+  text-decoration: none;
+  transition: all 0.28s ease;
+  display: inline-block;
+  white-space: nowrap;
+  text-transform: uppercase;
+  letter-spacing: 2px;
+}
+
+.btn-whatsapp:hover {
+  background: #1EBE5A;
+  transform: translateY(-2px);
+  box-shadow: 0 12px 32px rgba(37,211,102,0.4);
+  color: #fff;
+}
+
+.mt-4 { margin-top: 1.5rem; }
+
+/* ============================================================
+   FOOTER
+   ============================================================ */
+.global-footer {
+  text-align: center;
+  padding: 2.5rem 1.5rem;
+  background: #050505;
+  color: rgba(255,255,255,0.35);
+  font-size: 0.78rem;
+  letter-spacing: 1px;
+  position: relative;
+  z-index: 10;
+}
+
+/* ============================================================
+   CONTROLS / SWITCHER — Mobile First
+   ============================================================ */
+.controls-wrapper {
+  position: fixed;
+  bottom: calc(1.25rem + var(--safe-bottom));
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 100;
+  /* Full-width on small screens */
+  width: calc(100% - 2rem);
+  max-width: 360px;
+}
+
+.switcher {
+  display: flex;
+  width: 100%;
+  background: rgba(14,14,14,0.65);
+  backdrop-filter: blur(18px);
+  -webkit-backdrop-filter: blur(18px);
+  border-radius: 50px;
+  padding: 5px;
+  position: relative;
+  border: 1px solid rgba(255,255,255,0.1);
+  box-shadow: 0 16px 40px rgba(0,0,0,0.7);
+}
+
+.switch-btn {
+  flex: 1;
+  background: transparent;
+  border: none;
+  color: rgba(255,255,255,0.5);
+  padding: 0.8rem 0.5rem;
+  font-family: var(--font-anta);
+  font-size: 0.72rem;
+  letter-spacing: 1.5px;
+  cursor: pointer;
+  z-index: 2;
+  transition: color 0.3s ease;
+  outline: none;
+  position: relative;
+  text-align: center;
+}
+
+.switch-btn.active { color: #fff; }
+
+.switcher-pill {
+  position: absolute;
+  top: 5px;
+  left: 0;
+  height: calc(100% - 10px);
+  background: rgba(255,255,255,0.13);
+  border-radius: 50px;
+  z-index: 1;
+  transition: all 0.45s cubic-bezier(0.68, -0.4, 0.265, 1.4);
+}
+
+/* ============================================================
+   STATE MANAGEMENT (LIIT / AMBOSS / SPLIT)
+   — Only applies on desktop (handled via media query)
+   ============================================================ */
+
+/* Mobile state: hide/show panels by collapsing height */
+@media (max-width: 1023px) {
+  .page-wrapper.is-liit .panel-right { display: none; }
+  .page-wrapper.is-amboss .panel-left { display: none; }
+}
+
+/* ============================================================
+   TABLET (480px+) — Minor adjustments
+   ============================================================ */
+@media (min-width: 480px) {
+  .controls-wrapper {
+    width: auto;
+    max-width: none;
+  }
+
+  .switch-btn {
+    padding: 0.9rem 1.4rem;
+    font-size: 0.78rem;
+    flex: none;
+  }
+
+  .project-grid {
+    flex-direction: row; /* Side-by-side cards from tablet */
+  }
+
+  .project-card {
+    aspect-ratio: 3/4; /* Portrait cards on wider screens */
+  }
+
+  .panel-inner-content {
+    padding: 7rem 2.5rem 4rem;
+  }
+}
+
+/* ============================================================
+   TABLET LANDSCAPE / SMALL DESKTOP (768px+)
+   ============================================================ */
+@media (min-width: 768px) {
+  /* Nav: switch to desktop style */
+  .global-nav {
+    padding: 2rem 0;
+    justify-content: center;
+    background: transparent;
+    border-bottom: none;
+    mix-blend-mode: difference;
+    pointer-events: none;
+  }
+
+  .nav-brand,
+  .nav-toggle {
+    display: none;
+  }
+
+  .nav-links {
+    display: flex;
+    pointer-events: auto;
+  }
+
+  /* No mobile overlay on desktop */
+  .nav-mobile { display: none !important; }
+
+  /* Brand identity: restore side positioning */
+  .brand-identity-left {
+    bottom: 10rem;
+    left: 6%;
+    transform: none;
+    align-items: flex-start;
+    text-align: left;
+    width: auto;
+  }
+
+  .brand-identity-right {
+    bottom: 10rem;
+    left: auto;
+    right: 6%;
+    transform: none;
+    align-items: flex-end;
+    text-align: right;
+    width: auto;
+  }
+
+  .panel-inner-content {
+    padding: 8rem 5% 5rem;
+    align-items: flex-start;
+    text-align: left;
+    margin: 0;
+  }
+
+  .panel-inner-content.align-right {
+    align-items: flex-end;
+    text-align: right;
+    margin-left: auto;
+  }
+
+  .hero-tagline {
+    font-size: clamp(1.1rem, 2vw, 1.6rem);
+    margin-bottom: 2.5rem;
+  }
+
+  .btn-whatsapp {
+    padding: 1.2rem 3rem;
+    font-size: 1rem;
+  }
+
+  .scroll-indicator { bottom: 8rem; }
+}
+
+/* ============================================================
+   DESKTOP (1024px+) — Full split panel experience
+   ============================================================ */
+@media (min-width: 1024px) {
+  /* Enable scroll snap on desktop */
+  html {
+    scroll-snap-type: y mandatory;
+  }
+
+  .split-section {
+    flex-direction: row; /* Side-by-side panels */
+    min-height: 100vh;
+    scroll-snap-align: start;
+    scroll-snap-stop: always;
+  }
+
+  .panel {
+    min-height: auto;
+    transform: translateZ(0);
+    transition: flex var(--t-panel) var(--t-ease);
+  }
+
+  /* Show divider on desktop */
+  .split-divider { display: flex; }
+
+  /* Panel bg transitions */
+  .panel-bg {
+    transition: transform var(--t-panel) var(--t-ease);
+  }
+
+  /* Restore desktop display for hidden panels */
+  .page-wrapper.is-liit .panel-right,
+  .page-wrapper.is-amboss .panel-left {
+    display: flex;
+  }
+
+  /* Panel-right BG positioning */
+  .panel-right .panel-bg {
+    left: auto;
+    right: 0;
+    width: 100vw;
+  }
+
+  /* Project content padding */
+  .panel-content.project-content {
+    padding-top: 10rem;
+    min-width: 50vw;
+  }
+
+  /* ---- STATE: LIIT ---- */
+  .page-wrapper.is-liit .split-section .panel-left { flex: 100; }
+  .page-wrapper.is-liit .split-section .panel-right { flex: 0; }
+
+  .page-wrapper.is-liit .split-section .panel-right .panel-content,
+  .page-wrapper.is-liit .split-section .panel-right .panel-inner-content,
+  .page-wrapper.is-liit .split-section .panel-right .panel-brand-identity {
+    opacity: 0;
+    transform: scale(0.95);
+    transition-delay: 0s;
+  }
+
+  .page-wrapper.is-liit .split-section .panel-left .panel-content,
+  .page-wrapper.is-liit .split-section .panel-left .panel-inner-content,
+  .page-wrapper.is-liit .split-section .panel-left .panel-brand-identity {
+    transition-delay: 0.25s;
+  }
+
+  /* ---- STATE: AMBOSS ---- */
+  .page-wrapper.is-amboss .split-section .panel-left { flex: 0; }
+  .page-wrapper.is-amboss .split-section .panel-right { flex: 100; }
+
+  .page-wrapper.is-amboss .split-section .panel-left .panel-content,
+  .page-wrapper.is-amboss .split-section .panel-left .panel-inner-content,
+  .page-wrapper.is-amboss .split-section .panel-left .panel-brand-identity {
+    opacity: 0;
+    transform: scale(0.95);
+    transition-delay: 0s;
+  }
+
+  .page-wrapper.is-amboss .split-section .panel-right .panel-content,
+  .page-wrapper.is-amboss .split-section .panel-right .panel-inner-content,
+  .page-wrapper.is-amboss .split-section .panel-right .panel-brand-identity {
+    transition-delay: 0.25s;
+  }
+
+  /* ---- Divider hidden when single brand ---- */
+  .page-wrapper:not(.is-split) .split-divider { opacity: 0; }
+
+  /* ---- Hover: subtle expansion ---- */
+  @media (prefers-reduced-motion: no-preference) {
+    .page-wrapper.is-split .panel-left:hover { flex: 1.08; }
+    .page-wrapper.is-split .panel-right:hover { flex: 1.08; }
+
+    .page-wrapper.is-split .panel-left:hover .panel-bg,
+    .page-wrapper.is-split .panel-right:hover .panel-bg {
+      transform: translateZ(0) scale(1.03);
+    }
+
+    .panel-left:hover .brand-accent-line,
+    .panel-right:hover .brand-accent-line { width: 80px; }
+  }
+
+  /* Switcher: auto width on desktop */
+  .controls-wrapper {
+    width: auto;
+    max-width: none;
+    bottom: 2.5rem;
+  }
+
+  .switch-btn {
+    padding: 1rem 1.8rem;
+    font-size: 0.82rem;
+    flex: none;
+  }
+}
+
+/* ============================================================
+   LARGE DESKTOP (1280px+)
+   ============================================================ */
+@media (min-width: 1280px) {
+  .nav-links { gap: 4rem; }
+
+  .nav-links a { font-size: 0.95rem; }
+}

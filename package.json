@@ -1,0 +1,19 @@
+{
+  "name": "liit-amboss",
+  "version": "1.0.0",
+  "description": "LIIT x AMBOSS — Estudio de Arquitectura y Construcción",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "preview": "vite preview",
+    "build:analyze": "vite build --mode analyze"
+  },
+  "devDependencies": {
+    "vite": "^6.3.2",
+    "vite-plugin-pwa": "^0.21.1",
+    "autoprefixer": "^10.4.21",
+    "postcss": "^8.5.3"
+  }
+}

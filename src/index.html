@@ -1,0 +1,253 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <title>LIIT / AMBOSS — Arquitectura</title>
+
+  <!-- SEO & Social -->
+  <meta name="description" content="Estudio dual de arquitectura y construcción. LIIT: Diseño Fresco. AMBOSS: Ejecución Sólida.">
+  <meta name="theme-color" content="#000000">
+
+  <!-- Open Graph -->
+  <meta property="og:title" content="LIIT / AMBOSS — Arquitectura">
+  <meta property="og:description" content="Conceptualizamos el futuro. Lo construimos con precisión.">
+  <meta property="og:type" content="website">
+
+  <!-- Apple / PWA -->
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="apple-mobile-web-app-title" content="LIIT|AMBOSS">
+  <link rel="apple-touch-icon" href="/apple-touch-icon.png">
+
+  <!-- Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Anta&display=swap" rel="stylesheet">
+
+  <link rel="icon" type="image/svg+xml" href="/favicon.svg">
+</head>
+
+<body>
+
+  <!-- ========================================
+       NAVIGATION
+       ======================================== -->
+  <nav class="global-nav" id="global-nav">
+    <!-- Mobile: brand logo -->
+    <a class="nav-brand" href="#hero" aria-label="Inicio">L|A</a>
+
+    <!-- Desktop: centered links -->
+    <ul class="nav-links" role="list">
+      <li><a href="#hero">INICIO</a></li>
+      <li><a href="#nosotros">NOSOTROS</a></li>
+      <li><a href="#proyectos">PROYECTOS</a></li>
+      <li><a href="/simulator.html">SIMULADOR</a></li>
+      <li><a href="#contacto">CONTACTO</a></li>
+    </ul>
+
+    <!-- Mobile: hamburger -->
+    <button class="nav-toggle" aria-label="Abrir menú" aria-expanded="false" aria-controls="nav-mobile">
+      <span></span>
+      <span></span>
+      <span></span>
+    </button>
+  </nav>
+
+  <!-- Mobile Full-screen Menu -->
+  <div class="nav-mobile" id="nav-mobile" role="dialog" aria-label="Menú principal" aria-hidden="true">
+    <button class="nav-close" aria-label="Cerrar menú">✕</button>
+    <ul class="nav-mobile-links" role="list">
+      <li><a href="#hero">INICIO</a></li>
+      <li><a href="#nosotros">NOSOTROS</a></li>
+      <li><a href="#proyectos">PROYECTOS</a></li>
+      <li><a href="/simulator.html">SIMULADOR</a></li>
+      <li><a href="#contacto">CONTACTO</a></li>
+    </ul>
+  </div>
+
+  <!-- ========================================
+       MAIN CONTENT
+       ======================================== -->
+  <main class="page-wrapper is-split" id="page-wrapper">
+
+    <!-- SECTION 1: HERO -->
+    <section class="split-section" id="hero">
+      <!-- LIIT Panel -->
+      <div class="panel panel-left panel-hero-liit">
+        <div class="panel-bg"
+          style="background-image: url('https://images.unsplash.com/photo-1511818966892-d7d671e672a2?q=80&w=2071&auto=format&fit=crop');">
+        </div>
+        <div class="panel-overlay liit-overlay"></div>
+        <div class="panel-brand-identity brand-identity-left">
+          <span class="brand-eyebrow">Estudio de Diseño</span>
+          <h2 class="panel-brand-name">LIIT</h2>
+          <div class="brand-accent-line"></div>
+          <span class="brand-descriptor">Diseño Fresco</span>
+        </div>
+      </div>
+
+      <!-- AMBOSS Panel -->
+      <div class="panel panel-right panel-hero-amboss">
+        <div class="panel-bg"
+          style="background-image: url('https://images.unsplash.com/photo-1503387762-592deb58ef4e?q=80&w=1931&auto=format&fit=crop');">
+        </div>
+        <div class="panel-overlay amboss-overlay"></div>
+        <div class="panel-brand-identity brand-identity-right">
+          <span class="brand-eyebrow amboss-eyebrow">Ingeniería de Obra</span>
+          <h2 class="panel-brand-name amboss-brand-name">AMBOSS</h2>
+          <div class="brand-accent-line amboss-accent-line"></div>
+          <span class="brand-descriptor">Ejecución Sólida</span>
+        </div>
+      </div>
+
+      <!-- Divider (desktop) -->
+      <div class="split-divider" aria-hidden="true">
+        <div class="divider-line"></div>
+        <div class="divider-badge">L|A</div>
+        <div class="divider-line"></div>
+      </div>
+
+      <!-- Unified CTA -->
+      <div class="unified-content hero-unified">
+        <p class="hero-tagline">Conceptualizamos el futuro.<br>Lo construimos con precisión.</p>
+        <a href="#proyectos" class="btn btn-unified">Explorar Proyectos</a>
+      </div>
+
+      <div class="scroll-indicator" aria-hidden="true">
+        <span>DESCUBRE MÁS</span>
+        <div class="mouse"></div>
+      </div>
+    </section>
+
+    <!-- SECTION 2: NOSOTROS -->
+    <section class="split-section" id="nosotros">
+      <!-- LIIT Panel -->
+      <div class="panel panel-left liit-bg">
+        <div class="panel-inner-content">
+          <span class="brand-eyebrow">Quiénes Somos</span>
+          <h2 class="inner-brand-name">LIIT</h2>
+          <div class="brand-accent-line nosotros-line"></div>
+          <p class="body-text">Nacemos de la necesidad de cuestionar lo establecido. Exploramos líneas disruptivas e innovadoras que reinventan la relación entre espacio, forma y experiencia humana.</p>
+          <p class="body-text">Cada proyecto es una exploración conceptual que desafía los límites de la arquitectura contemporánea.</p>
+        </div>
+      </div>
+
+      <!-- AMBOSS Panel -->
+      <div class="panel panel-right amboss-bg">
+        <div class="panel-inner-content align-right">
+          <span class="brand-eyebrow amboss-eyebrow">Quiénes Somos</span>
+          <h2 class="inner-brand-name amboss-inner-name">AMBOSS</h2>
+          <div class="brand-accent-line amboss-accent-line nosotros-line"></div>
+          <p class="body-text">Materializamos ideas complejas en realidades impecables con rigor ingenieril. Gestionamos cada obra con precisión para entregar proyectos monumentales que perduran en el tiempo.</p>
+          <p class="body-text">Donde la visión se convierte en estructura sólida, confiable y duradera.</p>
+        </div>
+      </div>
+
+      <!-- Divider (desktop) -->
+      <div class="split-divider" aria-hidden="true">
+        <div class="divider-line"></div>
+        <div class="divider-badge">L|A</div>
+        <div class="divider-line"></div>
+      </div>
+    </section>
+
+    <!-- SECTION 3: PROYECTOS -->
+    <section class="split-section" id="proyectos">
+      <!-- Unified Title -->
+      <div class="unified-content unified-top">
+        <h2 class="section-title">Portafolio Integrado</h2>
+      </div>
+
+      <!-- LIIT Panel -->
+      <div class="panel panel-left project-panel">
+        <div class="panel-bg"
+          style="background-image: url('https://images.unsplash.com/photo-1600585154340-be6161a56a0c?q=80&w=2070&auto=format&fit=crop');">
+        </div>
+        <div class="panel-overlay liit-overlay heavy"></div>
+        <div class="panel-content project-content">
+          <div class="project-brand-label">LIIT</div>
+          <div class="project-grid">
+            <div class="project-card liit-card">
+              <img src="https://images.unsplash.com/photo-1600607688969-a5bfcd64bd40?q=80&w=800&auto=format&fit=crop"
+                alt="Pabellón Zero — LIIT" loading="lazy" width="800" height="533">
+              <div class="card-info">Pabellón Zero</div>
+            </div>
+            <div class="project-card liit-card">
+              <img src="https://images.unsplash.com/photo-1598928506311-c55dd1b31bb1?q=80&w=800&auto=format&fit=crop"
+                alt="Casa Prisma — LIIT" loading="lazy" width="800" height="533">
+              <div class="card-info">Casa Prisma</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- AMBOSS Panel -->
+      <div class="panel panel-right project-panel">
+        <div class="panel-bg"
+          style="background-image: url('https://images.unsplash.com/photo-1541888085-f5db283bf976?q=80&w=2073&auto=format&fit=crop');">
+        </div>
+        <div class="panel-overlay amboss-overlay heavy"></div>
+        <div class="panel-content project-content">
+          <div class="project-brand-label amboss-project-label">AMBOSS</div>
+          <div class="project-grid">
+            <div class="project-card amboss-card">
+              <img src="https://images.unsplash.com/photo-1504307651254-35680f356dfd?q=80&w=800&auto=format&fit=crop"
+                alt="Torre Cima — AMBOSS" loading="lazy" width="800" height="533">
+              <div class="card-info">Torre Cima</div>
+            </div>
+            <div class="project-card amboss-card">
+              <img src="https://images.unsplash.com/photo-1581094794329-c8112a89af12?q=80&w=800&auto=format&fit=crop"
+                alt="Complejo Industrial Z — AMBOSS" loading="lazy" width="800" height="533">
+              <div class="card-info">Complejo Industrial Z</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- SECTION 4: CONTACTO -->
+    <section class="split-section" id="contacto">
+      <div class="panel panel-left contact-panel liit-bg"></div>
+      <div class="panel panel-right contact-panel amboss-bg"></div>
+
+      <div class="split-divider" aria-hidden="true">
+        <div class="divider-line"></div>
+        <div class="divider-badge">L|A</div>
+        <div class="divider-line"></div>
+      </div>
+
+      <div class="unified-content">
+        <h2 class="section-title">Diseñemos y Construyamos.</h2>
+        <p class="subtitle-small">¿Tienes un proyecto en mente?<br>Nosotros aportamos la visión y la estructura.</p>
+        <a href="https://wa.me/573157060211" target="_blank" rel="noopener noreferrer"
+          class="btn btn-whatsapp mt-4">
+          Escríbenos por WhatsApp
+        </a>
+      </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="global-footer">
+      <p>&copy; 2026 LIIT / AMBOSS. Arquitectura en Equilibrio.</p>
+    </footer>
+
+  </main>
+
+  <!-- ========================================
+       SWITCHER CONTROL
+       ======================================== -->
+  <div class="controls-wrapper" role="group" aria-label="Vista de marca">
+    <div class="switcher">
+      <div class="switcher-pill" aria-hidden="true"></div>
+      <button class="switch-btn" data-target="liit">LIIT</button>
+      <button class="switch-btn active" data-target="split">DIVIDIDA</button>
+      <button class="switch-btn" data-target="amboss">AMBOSS</button>
+    </div>
+  </div>
+
+  <script type="module" src="/js/main.js"></script>
+</body>
+
+</html>

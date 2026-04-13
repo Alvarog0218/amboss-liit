@@ -1,0 +1,565 @@
+/* ============================================================
+   SIMULATOR — Mobile First Styles
+   ============================================================ */
+
+/* ---- Tokens (reuse from main) ---- */
+:root {
+  --font-anta: 'Anta', sans-serif;
+  --liit-primary: #4d1f2e;
+  --liit-accent: #465037;
+  --amboss-green: #1ee36f;
+  --text-light: #ffffff;
+  --safe-top: env(safe-area-inset-top, 0px);
+  --safe-bottom: env(safe-area-inset-bottom, 0px);
+}
+
+*, *::before, *::after {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: var(--font-anta);
+  color: var(--text-light);
+  overflow-x: hidden;
+  -webkit-text-size-adjust: 100%;
+}
+
+img { display: block; max-width: 100%; }
+
+/* ============================================================
+   SIMULATOR PAGE BASE
+   ============================================================ */
+.simulator-page {
+  overflow-y: auto;
+  background-color: #0b0b0b;
+  min-height: 100dvh;
+  padding-bottom: var(--safe-bottom);
+}
+
+/* ============================================================
+   HEADER — Mobile First
+   ============================================================ */
+.simulator-header {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: calc(2rem + var(--safe-top)) 1rem 1.75rem;
+  position: relative;
+  border-bottom: 1px solid rgba(255,255,255,0.05);
+}
+
+.back-link {
+  position: absolute;
+  top: calc(1.5rem + var(--safe-top));
+  left: 1.25rem;
+  color: rgba(255,255,255,0.5);
+  text-decoration: none;
+  font-size: 0.85rem;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  transition: color 0.3s;
+  padding: 0.25rem;
+}
+
+.back-link:hover { color: #fff; }
+
+.combined-logo {
+  font-size: clamp(1.5rem, 5vw, 2.5rem);
+  font-weight: bold;
+  letter-spacing: 6px;
+  margin-bottom: 0.5rem;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.combined-logo span {
+  font-size: 1rem;
+  opacity: 0.5;
+  font-weight: normal;
+}
+
+.header-subtitle {
+  font-size: 0.85rem;
+  opacity: 0.7;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  text-align: center;
+}
+
+/* ============================================================
+   SIMULATOR LAYOUT — Mobile First (single column → two column)
+   ============================================================ */
+.simulator-layout {
+  display: flex;
+  flex-direction: column; /* Stack on mobile */
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 2.5rem 1.25rem;
+  gap: 2.5rem;
+}
+
+.control-panel { flex: 2; }
+
+.summary-panel-wrapper { flex: 1; }
+
+/* ============================================================
+   PROGRESS BAR (mobile only)
+   ============================================================ */
+.step-progress {
+  width: 100%;
+  height: 2px;
+  background: rgba(255,255,255,0.06);
+  border-radius: 2px;
+  margin-bottom: 1.75rem;
+  overflow: hidden;
+}
+
+.step-progress-bar {
+  height: 100%;
+  background: var(--amboss-green);
+  border-radius: 2px;
+  transition: width 0.4s ease;
+  width: 25%; /* Step 1 of 4 */
+}
+
+/* ============================================================
+   STEP INDICATOR
+   ============================================================ */
+.step-indicator {
+  font-size: 0.85rem;
+  color: var(--liit-accent);
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  margin-bottom: 1.75rem;
+  padding-bottom: 0.5rem;
+  border-bottom: 1px solid rgba(255,255,255,0.1);
+  display: inline-block;
+}
+
+/* ============================================================
+   STEPS
+   ============================================================ */
+.step-container {
+  display: none;
+  animation: fadeInStep 0.35s ease forwards;
+}
+
+.step-container.active-step { display: block; }
+
+@keyframes fadeInStep {
+  from { opacity: 0; transform: translateY(8px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+.sim-group { margin-bottom: 2rem; }
+
+.step-navigation {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 3rem;
+  padding-top: 1.75rem;
+  border-top: 1px solid rgba(255,255,255,0.05);
+}
+
+/* ============================================================
+   SIM TITLE
+   ============================================================ */
+.sim-title {
+  font-size: 1.1rem;
+  text-transform: uppercase;
+  letter-spacing: 2px;
+  margin-bottom: 1.25rem;
+  color: #fff;
+  padding-bottom: 0.5rem;
+  border-bottom: 1px solid rgba(255,255,255,0.1);
+}
+
+/* ============================================================
+   OPTIONS GRID — Mobile First (single → auto-fit)
+   ============================================================ */
+.options-grid {
+  display: grid;
+  grid-template-columns: 1fr; /* Single column on mobile */
+  gap: 1rem;
+}
+
+.sim-card input[type="radio"] { display: none; }
+
+.sim-card .card-content {
+  background: rgba(255,255,255,0.05);
+  border: 1px solid rgba(255,255,255,0.1);
+  border-radius: 8px;
+  padding: 1.25rem;
+  cursor: pointer;
+  transition: all 0.28s ease;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+}
+
+.sim-card .card-content h4 {
+  font-size: 1rem;
+  margin-bottom: 0.4rem;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+.sim-card .card-content p {
+  font-size: 0.85rem;
+  opacity: 0.6;
+  line-height: 1.5;
+}
+
+.sim-card:hover .card-content {
+  background: rgba(255,255,255,0.08);
+  border-color: rgba(255,255,255,0.2);
+}
+
+.project-types input[type="radio"]:checked + .card-content {
+  background: rgba(77,31,46,0.18);
+  border-color: var(--liit-primary);
+}
+
+.finish-types input[type="radio"]:checked + .card-content {
+  background: rgba(30,227,111,0.05);
+  border-color: var(--amboss-green);
+}
+
+/* ============================================================
+   RANGE SLIDER
+   ============================================================ */
+.range-container {
+  display: flex;
+  flex-direction: column; /* Stack on mobile */
+  gap: 1rem;
+  padding: 0.75rem 0;
+}
+
+input[type="range"] {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 100%;
+  height: 5px;
+  background: rgba(255,255,255,0.1);
+  border-radius: 5px;
+  outline: none;
+  padding: 0;
+  border: none;
+  cursor: pointer;
+}
+
+input[type="range"]::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 24px; /* Larger touch target on mobile */
+  height: 24px;
+  border-radius: 50%;
+  background: #fff;
+  cursor: pointer;
+  box-shadow: 0 0 10px rgba(255,255,255,0.5);
+  transition: transform 0.2s;
+}
+
+input[type="range"]::-webkit-slider-thumb:hover {
+  transform: scale(1.15);
+  background: var(--amboss-green);
+}
+
+input[type="range"]::-moz-range-thumb {
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  background: #fff;
+  cursor: pointer;
+  border: none;
+  box-shadow: 0 0 10px rgba(255,255,255,0.5);
+}
+
+.range-value {
+  font-size: 1.4rem;
+  font-weight: bold;
+  color: var(--amboss-green);
+  text-align: center;
+}
+
+/* ============================================================
+   TOGGLE SWITCHES
+   ============================================================ */
+.toggle-list {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.toggle-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1.25rem;
+  background: rgba(255,255,255,0.02);
+  border: 1px solid rgba(255,255,255,0.05);
+  border-radius: 8px;
+  cursor: pointer;
+  transition: background 0.28s;
+  gap: 1rem;
+}
+
+.toggle-item:hover { background: rgba(255,255,255,0.05); }
+
+.toggle-info { flex: 1; }
+
+.toggle-info h4 {
+  font-size: 0.95rem;
+  margin-bottom: 0.25rem;
+  letter-spacing: 1px;
+}
+
+.toggle-info p {
+  font-size: 0.8rem;
+  opacity: 0.6;
+  line-height: 1.4;
+}
+
+.toggle-switch {
+  position: relative;
+  display: inline-block;
+  width: 48px;
+  height: 26px;
+  flex-shrink: 0;
+}
+
+.toggle-switch input {
+  opacity: 0;
+  width: 0;
+  height: 0;
+  position: absolute;
+}
+
+.slider {
+  position: absolute;
+  cursor: pointer;
+  inset: 0;
+  background-color: rgba(255,255,255,0.1);
+  transition: 0.35s;
+}
+
+.slider::before {
+  position: absolute;
+  content: "";
+  height: 18px;
+  width: 18px;
+  left: 4px;
+  bottom: 4px;
+  background-color: white;
+  transition: 0.35s;
+}
+
+.toggle-switch input:checked + .slider { background-color: var(--liit-accent); }
+.toggle-switch input:focus + .slider { box-shadow: 0 0 1px var(--liit-accent); }
+.toggle-switch input:checked + .slider::before { transform: translateX(22px); }
+
+.slider.round { border-radius: 34px; }
+.slider.round::before { border-radius: 50%; }
+
+/* ============================================================
+   BUTTONS (Simulator)
+   ============================================================ */
+.btn {
+  padding: 0.9rem 2rem;
+  text-decoration: none;
+  font-family: var(--font-anta);
+  font-size: 0.85rem;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  transition: all 0.28s ease;
+  border-radius: 50px;
+  cursor: pointer;
+  display: inline-block;
+}
+
+.step-navigation .btn-primary {
+  background: #fff;
+  color: #111;
+  font-weight: bold;
+  border: none;
+  margin-left: auto;
+}
+
+.step-navigation .btn-primary:hover {
+  background: rgba(255,255,255,0.85);
+  transform: translateY(-2px);
+  box-shadow: 0 5px 15px rgba(255,255,255,0.1);
+}
+
+.step-navigation .btn-secondary {
+  background: transparent;
+  color: #fff;
+  border: 1px solid rgba(255,255,255,0.3);
+}
+
+.step-navigation .btn-secondary:hover {
+  background: rgba(255,255,255,0.05);
+  border-color: #fff;
+}
+
+/* ============================================================
+   SUMMARY PANEL — Mobile (on bottom) → Sticky on desktop
+   ============================================================ */
+.summary-panel {
+  background: rgba(255,255,255,0.03);
+  border: 1px solid rgba(255,255,255,0.08);
+  border-radius: 12px;
+  padding: 2rem 1.5rem;
+  box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+}
+
+.summary-panel h2 {
+  font-size: 1.1rem;
+  text-transform: uppercase;
+  letter-spacing: 2px;
+  margin-bottom: 1rem;
+  opacity: 0.8;
+}
+
+.price-display {
+  font-size: clamp(2rem, 6vw, 2.8rem);
+  font-weight: bold;
+  color: #fff;
+  margin-bottom: 0.4rem;
+  word-break: break-all;
+}
+
+.currency-note {
+  font-size: 0.78rem;
+  opacity: 0.5;
+  margin-bottom: 1.75rem;
+}
+
+.summary-breakdown {
+  display: flex;
+  flex-direction: column;
+  gap: 0.85rem;
+  margin-bottom: 2rem;
+}
+
+.breakdown-row {
+  display: flex;
+  justify-content: space-between;
+  font-size: 0.9rem;
+  color: rgba(255,255,255,0.8);
+  gap: 1rem;
+}
+
+.breakdown-row span:last-child {
+  text-align: right;
+  flex-shrink: 0;
+}
+
+.breakdown-row.divider {
+  height: 1px;
+  background: rgba(255,255,255,0.1);
+  margin: 0.25rem 0;
+}
+
+.btn-quote {
+  display: block;
+  text-align: center;
+  background: #fff;
+  color: #111;
+  font-weight: bold;
+  text-decoration: none;
+  font-family: var(--font-anta);
+  text-transform: uppercase;
+  letter-spacing: 2px;
+  padding: 1rem 2rem;
+  border-radius: 50px;
+  transition: all 0.28s ease;
+  border: none;
+  cursor: pointer;
+}
+
+.btn-quote:hover {
+  background: rgba(255,255,255,0.85);
+  transform: translateY(-2px);
+  box-shadow: 0 8px 20px rgba(255,255,255,0.1);
+}
+
+/* ============================================================
+   FOOTER
+   ============================================================ */
+.global-footer {
+  text-align: center;
+  padding: 2rem 1.5rem;
+  background: #050505;
+  color: rgba(255,255,255,0.35);
+  font-size: 0.75rem;
+  letter-spacing: 1px;
+}
+
+.neutral-footer {
+  border-top: 1px solid rgba(255,255,255,0.05);
+  background: #0b0b0b;
+}
+
+/* ============================================================
+   TABLET (480px+)
+   ============================================================ */
+@media (min-width: 480px) {
+  .options-grid {
+    grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+    gap: 1.25rem;
+  }
+
+  .range-container {
+    flex-direction: row;
+    align-items: center;
+    gap: 2rem;
+  }
+
+  .range-value {
+    font-size: 1.5rem;
+    min-width: 110px;
+    text-align: right;
+  }
+
+  input[type="range"]::-webkit-slider-thumb {
+    width: 20px;
+    height: 20px;
+  }
+}
+
+/* ============================================================
+   DESKTOP (900px+) — Two column layout
+   ============================================================ */
+@media (min-width: 900px) {
+  .simulator-layout {
+    flex-direction: row; /* Side by side */
+    padding: 4rem 2rem;
+    gap: 4rem;
+  }
+
+  .summary-panel {
+    position: sticky;
+    top: 2rem;
+    padding: 2.5rem;
+  }
+
+  /* Hide mobile-only progress bar */
+  .step-progress { display: none; }
+
+  .sim-title { font-size: 1.3rem; margin-bottom: 1.5rem; }
+
+  .toggle-info h4 { font-size: 1.1rem; }
+  .toggle-info p { font-size: 0.9rem; }
+
+  .sim-group { margin-bottom: 2rem; }
+
+  .step-navigation { margin-top: 4rem; padding-top: 2rem; }
+
+  .simulator-header {
+    padding: 3rem 1rem 2rem;
+  }
+}
