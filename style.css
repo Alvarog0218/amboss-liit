@@ -103,8 +103,7 @@ body {
 }
 
 .panel-left {
-    border-right: 1px solid rgba(255, 255, 255, 0.05);
-    /* Subtle division */
+    border-right: none;
 }
 
 /* Panel Backgrounds (Images) */
@@ -118,6 +117,8 @@ body {
     background-size: cover;
     background-position: center;
     transition: transform 1s cubic-bezier(0.77, 0, 0.175, 1);
+    filter: blur(3px); /* Reduced blur for more visibility */
+    transform: scale(1.05); /* Reduced scale to match lower blur */
 }
 
 .panel-left .panel-bg {
@@ -137,22 +138,46 @@ body {
     width: 100%;
     height: 100%;
     z-index: 1;
+    mix-blend-mode: multiply; 
+    opacity: 0.75; /* Reduced opacity to make backgrounds more visible */
 }
 
 .liit-overlay {
-    background: linear-gradient(135deg, rgba(77, 31, 46, 0.90) 0%, rgba(54, 77, 99, 0.90) 50%, rgba(70, 80, 55, 0.90) 100%);
+    background: linear-gradient(135deg, var(--liit-primary) 0%, var(--liit-secondary) 50%, var(--liit-accent) 100%);
 }
 
 .liit-overlay.heavy {
-    background: linear-gradient(135deg, rgba(77, 31, 46, 0.98) 0%, rgba(54, 77, 99, 0.98) 50%, rgba(70, 80, 55, 0.98) 100%);
+    background: linear-gradient(135deg, var(--liit-primary) 0%, var(--liit-secondary) 50%, var(--liit-accent) 100%);
+    opacity: 0.85;
 }
 
 .amboss-overlay {
-    background: linear-gradient(to right, rgba(0, 0, 0, 0.7) 0%, rgba(0, 0, 0, 0.98) 100%);
+    background: linear-gradient(to right, rgba(0, 0, 0, 0.5) 0%, rgba(0, 0, 0, 0.85) 100%);
 }
 
 .amboss-overlay.heavy {
-    background: rgba(0, 0, 0, 0.92);
+    background: rgba(0, 0, 0, 0.8);
+}
+
+/* Central Blend Effect */
+.split-section::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 12vw; /* Reduced width for a narrower transition zone */
+    height: 100%;
+    background: linear-gradient(to right, transparent, rgba(0,0,0,0.3) 50%, transparent);
+    backdrop-filter: blur(4px); /* Lower blur level at the junction */
+    z-index: 5;
+    pointer-events: none;
+    transition: opacity 0.5s ease;
+    mix-blend-mode: overlay; 
+}
+
+.page-wrapper:not(.is-split) .split-section::after {
+    opacity: 0;
 }
 
 /* Solid Color Backgrounds */
@@ -610,6 +635,59 @@ textarea:focus {
 /* ==========================================================================
    SIMULATOR LAYOUT & SPECIFICS
    ========================================================================== */
+
+/* Unified Content */
+.unified-content {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    z-index: 10;
+    text-align: center;
+    width: 100%;
+    max-width: 800px;
+    padding: 2rem;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    pointer-events: none;
+}
+
+.unified-content > * {
+    pointer-events: auto;
+}
+
+.unified-top {
+    top: 15%;
+    transform: translate(-50%, 0);
+}
+
+.btn-unified {
+    padding: 1.2rem 3rem;
+    text-decoration: none;
+    font-size: 0.95rem;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    transition: all 0.3s ease;
+    border-radius: 50px;
+    cursor: pointer;
+    color: #fff;
+    border: 1px solid rgba(255, 255, 255, 0.4);
+    background: transparent;
+    display: inline-block;
+}
+
+.btn-unified:hover {
+    background: #fff;
+    color: var(--amboss-black);
+    transform: translateY(-2px);
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+}
+
+.mt-4 {
+    margin-top: 2rem;
+}
 
 .simulator-page {
     overflow-y: auto;
