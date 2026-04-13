@@ -12,6 +12,11 @@
 
     --text-light: #ffffff;
     --text-dark: #1a1a1a;
+
+    /* Transition speed tokens */
+    --t-panel: 0.65s;
+    --t-ease: cubic-bezier(0.76, 0, 0.24, 1);
+    --t-fade: 0.4s ease;
 }
 
 * {
@@ -31,10 +36,11 @@ body {
     color: var(--text-light);
     overflow-x: hidden;
     overflow-y: auto;
-    /* ALLOW SCROLLING NOW */
 }
 
-/* Global Navigation */
+/* ============================================================
+   GLOBAL NAVIGATION
+   ============================================================ */
 .global-nav {
     position: fixed;
     top: 0;
@@ -71,58 +77,53 @@ body {
     opacity: 0.7;
 }
 
-/* Page Wrapper */
+/* ============================================================
+   PAGE WRAPPER & SECTIONS
+   ============================================================ */
 .page-wrapper {
     width: 100vw;
     display: flex;
     flex-direction: column;
 }
 
-/* Split Section (Applies to all vertically stacked sections) */
 .split-section {
     display: flex;
     width: 100vw;
     min-height: 100vh;
-    /* Minimum 100vh, can grow if content needs it */
     position: relative;
     overflow: hidden;
-    /* Hide panel overflow */
     scroll-snap-align: start;
     scroll-snap-stop: always;
 }
 
+/* ============================================================
+   PANELS — GPU-accelerated transitions
+   ============================================================ */
 .panel {
     flex: 1;
-    /* Default 50/50 */
     position: relative;
-    transition: flex 1s cubic-bezier(0.77, 0, 0.175, 1);
+    /* Use translateZ to promote to compositor layer for smoother animation */
+    transform: translateZ(0);
+    transition: flex var(--t-panel) var(--t-ease);
     display: flex;
     align-items: center;
     justify-content: center;
     overflow: hidden;
 }
 
-.panel-left {
-    border-right: none;
-}
-
-/* Panel Backgrounds (Images) */
+/* Panel Backgrounds */
 .panel-bg {
     position: absolute;
     top: 0;
     left: 0;
     width: 100vw;
-    /* Keeps aspect ratio locked relative to screen width during flex animation */
     height: 100%;
     background-size: cover;
     background-position: center;
-    transition: transform 1s cubic-bezier(0.77, 0, 0.175, 1);
-    filter: blur(3px); /* Reduced blur for more visibility */
-    transform: scale(1.05); /* Reduced scale to match lower blur */
-}
-
-.panel-left .panel-bg {
-    left: 0;
+    transform: translateZ(0) scale(1.05);
+    transition: transform var(--t-panel) var(--t-ease);
+    filter: blur(2px);
+    will-change: transform;
 }
 
 .panel-right .panel-bg {
@@ -138,8 +139,8 @@ body {
     width: 100%;
     height: 100%;
     z-index: 1;
-    mix-blend-mode: multiply; 
-    opacity: 0.75; /* Reduced opacity to make backgrounds more visible */
+    mix-blend-mode: multiply;
+    opacity: 0.8;
 }
 
 .liit-overlay {
@@ -147,37 +148,15 @@ body {
 }
 
 .liit-overlay.heavy {
-    background: linear-gradient(135deg, var(--liit-primary) 0%, var(--liit-secondary) 50%, var(--liit-accent) 100%);
-    opacity: 0.85;
+    opacity: 0.88;
 }
 
 .amboss-overlay {
-    background: linear-gradient(to right, rgba(0, 0, 0, 0.5) 0%, rgba(0, 0, 0, 0.85) 100%);
+    background: linear-gradient(to right, rgba(0, 0, 0, 0.5) 0%, rgba(0, 0, 0, 0.88) 100%);
 }
 
 .amboss-overlay.heavy {
-    background: rgba(0, 0, 0, 0.8);
-}
-
-/* Central Blend Effect */
-.split-section::after {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: 50%;
-    transform: translateX(-50%);
-    width: 12vw; /* Reduced width for a narrower transition zone */
-    height: 100%;
-    background: linear-gradient(to right, transparent, rgba(0,0,0,0.3) 50%, transparent);
-    backdrop-filter: blur(4px); /* Lower blur level at the junction */
-    z-index: 5;
-    pointer-events: none;
-    transition: opacity 0.5s ease;
-    mix-blend-mode: overlay; 
-}
-
-.page-wrapper:not(.is-split) .split-section::after {
-    opacity: 0;
+    background: rgba(0, 0, 0, 0.82);
 }
 
 /* Solid Color Backgrounds */
@@ -189,7 +168,179 @@ body {
     background-color: var(--amboss-black);
 }
 
-/* Content Standardized */
+/* ============================================================
+   ARCHITECTURAL DIVIDER — replaces the blurry ::after
+   ============================================================ */
+.split-divider {
+    position: absolute;
+    top: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 1px;
+    height: 100%;
+    z-index: 8;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    pointer-events: none;
+    transition: opacity var(--t-fade);
+}
+
+.divider-line {
+    flex: 1;
+    width: 1px;
+    background: linear-gradient(to bottom, transparent, rgba(255, 255, 255, 0.18) 20%, rgba(255, 255, 255, 0.18) 80%, transparent);
+}
+
+.divider-badge {
+    padding: 0.9rem 0.7rem;
+    font-size: 0.7rem;
+    letter-spacing: 3px;
+    color: rgba(255, 255, 255, 0.55);
+    background: rgba(10, 10, 10, 0.7);
+    border: 1px solid rgba(255, 255, 255, 0.12);
+    border-radius: 3px;
+    white-space: nowrap;
+    backdrop-filter: blur(6px);
+    -webkit-backdrop-filter: blur(6px);
+}
+
+/* Hide divider when a single brand is active */
+.page-wrapper:not(.is-split) .split-divider {
+    opacity: 0;
+}
+
+/* ============================================================
+   BRAND IDENTITY — Hero panel labels
+   ============================================================ */
+.panel-brand-identity {
+    position: absolute;
+    z-index: 3;
+    display: flex;
+    flex-direction: column;
+    pointer-events: none;
+    transition: opacity var(--t-panel) var(--t-ease), transform var(--t-panel) var(--t-ease);
+}
+
+.brand-identity-left {
+    bottom: 10rem;
+    left: 6%;
+    align-items: flex-start;
+}
+
+.brand-identity-right {
+    bottom: 10rem;
+    right: 6%;
+    align-items: flex-end;
+    text-align: right;
+}
+
+.brand-eyebrow {
+    font-size: 0.72rem;
+    letter-spacing: 4px;
+    text-transform: uppercase;
+    opacity: 0.55;
+    margin-bottom: 0.6rem;
+}
+
+.amboss-eyebrow {
+    color: var(--amboss-green);
+    opacity: 0.7;
+}
+
+.panel-brand-name {
+    font-size: clamp(4.5rem, 9vw, 11rem);
+    font-weight: bold;
+    letter-spacing: 6px;
+    line-height: 1;
+    color: rgba(255, 255, 255, 0.88);
+    text-transform: uppercase;
+}
+
+.amboss-brand-name {
+    color: var(--amboss-green);
+}
+
+.brand-accent-line {
+    width: 50px;
+    height: 2px;
+    background: rgba(255, 255, 255, 0.35);
+    margin: 1rem 0;
+    transition: width var(--t-fade);
+}
+
+.amboss-accent-line {
+    background: var(--amboss-green);
+}
+
+.brand-descriptor {
+    font-size: 0.85rem;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    opacity: 0.6;
+}
+
+/* ============================================================
+   NOSOTROS — Panel inner content
+   ============================================================ */
+.panel-inner-content {
+    position: relative;
+    z-index: 2;
+    padding: 8rem 5% 5rem;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    width: 100%;
+    max-width: 520px;
+    transition: opacity var(--t-panel) var(--t-ease), transform var(--t-panel) var(--t-ease);
+}
+
+.panel-inner-content.align-right {
+    align-items: flex-end;
+    text-align: right;
+    margin-left: auto;
+}
+
+.inner-brand-name {
+    font-size: clamp(3rem, 6vw, 8rem);
+    font-weight: bold;
+    letter-spacing: 6px;
+    line-height: 1;
+    margin: 0.4rem 0;
+    color: rgba(255, 255, 255, 0.92);
+}
+
+.amboss-inner-name {
+    color: var(--amboss-green);
+}
+
+.nosotros-line {
+    width: 70px;
+    margin: 1.2rem 0 2rem;
+}
+
+/* ============================================================
+   PROJECTS — Brand labels
+   ============================================================ */
+.project-brand-label {
+    font-size: 2.5rem;
+    font-weight: bold;
+    letter-spacing: 5px;
+    color: rgba(255, 255, 255, 0.25);
+    margin-bottom: 1.5rem;
+    align-self: flex-start;
+    text-transform: uppercase;
+    width: 100%;
+    text-align: left;
+}
+
+.amboss-project-label {
+    color: rgba(30, 227, 111, 0.3);
+}
+
+/* ============================================================
+   PANEL CONTENT (project panels)
+   ============================================================ */
 .panel-content {
     position: relative;
     z-index: 2;
@@ -202,8 +353,7 @@ body {
     align-items: center;
     justify-content: center;
     min-width: 50vw;
-    /* Keep content anchored during switch */
-    transition: opacity 0.5s, transform 0.5s;
+    transition: opacity var(--t-fade), transform var(--t-fade);
 }
 
 .panel-content.align-left {
@@ -211,8 +361,52 @@ body {
     text-align: left;
 }
 
+/* ============================================================
+   UNIFIED CONTENT (centered overlays)
+   ============================================================ */
+.unified-content {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    z-index: 10;
+    text-align: center;
+    width: 100%;
+    max-width: 800px;
+    padding: 2rem;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    pointer-events: none;
+}
 
-/* Brand Elements */
+.unified-content > * {
+    pointer-events: auto;
+}
+
+.unified-top {
+    top: 15%;
+    transform: translate(-50%, 0);
+}
+
+/* Hero-specific unified content — just tagline + CTA */
+.hero-unified {
+    /* Keep centered but let brand identities breathe below */
+}
+
+.hero-tagline {
+    font-size: clamp(1.1rem, 1.8vw, 1.6rem);
+    line-height: 1.7;
+    opacity: 0.8;
+    margin-bottom: 2.5rem;
+    text-align: center;
+    max-width: 460px;
+}
+
+/* ============================================================
+   BRAND ELEMENTS (legacy / shared)
+   ============================================================ */
 .brand-logo {
     font-size: 2.2rem;
     font-weight: bold;
@@ -230,14 +424,6 @@ body {
     margin-top: 5px;
 }
 
-.liit-color {
-    color: #fff;
-}
-
-.amboss-color {
-    color: var(--amboss-green);
-}
-
 .monogram-bg {
     position: absolute;
     font-size: 45rem;
@@ -251,13 +437,9 @@ body {
     font-weight: bold;
 }
 
-.monogram-bg.small {
-    font-size: 25rem;
-    left: 70%;
-}
-
-
-/* Typography */
+/* ============================================================
+   TYPOGRAPHY
+   ============================================================ */
 .main-title {
     font-size: clamp(3rem, 5vw, 6rem);
     line-height: 1.1;
@@ -288,209 +470,63 @@ body {
 }
 
 .body-text {
-    font-size: 1.15rem;
-    line-height: 1.8;
+    font-size: 1.05rem;
+    line-height: 1.85;
     margin-bottom: 1.5rem;
-    opacity: 0.9;
-    max-width: 450px;
+    opacity: 0.85;
+    max-width: 420px;
 }
 
-/* Buttons */
+/* ============================================================
+   BUTTONS
+   ============================================================ */
 .btn {
     padding: 1.2rem 3rem;
     text-decoration: none;
     font-size: 0.95rem;
     letter-spacing: 2px;
     text-transform: uppercase;
-    transition: all 0.3s ease;
+    transition: all 0.28s ease;
     border-radius: 50px;
     border: 1px solid transparent;
     cursor: pointer;
     background: transparent;
 }
 
-.btn-liit {
-    color: #fff;
-    border-color: rgba(255, 255, 255, 0.4);
-}
-
-.btn-liit:hover {
-    background: #fff;
-    color: var(--liit-primary);
-    transform: translateY(-2px);
-    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
-}
-
-.btn-amboss {
-    background: var(--amboss-green);
-    color: var(--amboss-black);
-}
-
-.btn-amboss:hover {
-    background: transparent;
-    color: var(--amboss-green);
-    border-color: var(--amboss-green);
-    transform: translateY(-2px);
-    box-shadow: 0 10px 20px rgba(30, 227, 111, 0.2);
-}
-
-/* Scroll Indicator */
-.scroll-indicator {
-    position: absolute;
-    bottom: 8rem;
-    left: 50%;
-    transform: translateX(-50%);
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    opacity: 0.6;
-    animation: bounce 2s infinite;
-    z-index: 10;
-    pointer-events: none;
-}
-
-.scroll-indicator span {
-    font-size: 0.7rem;
-    letter-spacing: 3px;
-    margin-bottom: 10px;
-}
-
-.mouse {
-    width: 24px;
-    height: 36px;
-    border: 2px solid #fff;
-    border-radius: 12px;
-    position: relative;
-}
-
-.mouse::after {
-    content: '';
-    position: absolute;
-    top: 6px;
-    left: 50%;
-    transform: translateX(-50%);
-    width: 4px;
-    height: 8px;
-    background: #fff;
-    border-radius: 2px;
-}
-
-@keyframes bounce {
-
-    0%,
-    20%,
-    50%,
-    80%,
-    100% {
-        transform: translate(-50%, 0);
-    }
-
-    40% {
-        transform: translate(-50%, -10px);
-    }
-
-    60% {
-        transform: translate(-50%, -5px);
-    }
-}
-
-/* Projects Cards */
-.project-grid {
-    display: flex;
-    gap: 2rem;
-    width: 100%;
-}
-
-.project-card {
-    flex: 1;
-    position: relative;
-    border-radius: 12px;
-    overflow: hidden;
-    aspect-ratio: 3/4;
+.btn-unified {
+    padding: 1.2rem 3rem;
+    text-decoration: none;
+    font-size: 0.95rem;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    transition: all 0.28s ease;
+    border-radius: 50px;
     cursor: pointer;
-}
-
-.project-card img {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-    transition: transform 0.5s;
-}
-
-.project-card:hover img {
-    transform: scale(1.05);
-}
-
-.card-info {
-    position: absolute;
-    bottom: 0;
-    left: 0;
-    width: 100%;
-    padding: 1.5rem;
-    background: linear-gradient(transparent, rgba(0, 0, 0, 0.9));
-    font-size: 1.1rem;
-    letter-spacing: 1px;
-}
-
-/* Forms */
-.contact-form {
-    display: flex;
-    flex-direction: column;
-    gap: 1.5rem;
-    width: 100%;
-    max-width: 400px;
-}
-
-input,
-textarea {
-    width: 100%;
-    background: rgba(255, 255, 255, 0.05);
-    border: 1px solid rgba(255, 255, 255, 0.1);
-    padding: 1rem 1.5rem;
     color: #fff;
-    font-family: var(--font-anta);
-    font-size: 1rem;
-    border-radius: 8px;
-    outline: none;
-    transition: border-color 0.3s;
+    border: 1px solid rgba(255, 255, 255, 0.4);
+    background: transparent;
+    display: inline-block;
+    backdrop-filter: blur(4px);
+    -webkit-backdrop-filter: blur(4px);
 }
 
-input:focus,
-textarea:focus {
-    border-color: rgba(255, 255, 255, 0.5);
-}
-
-.amboss-form input,
-.amboss-form textarea {
-    border-color: rgba(30, 227, 111, 0.2);
-}
-
-.amboss-form input:focus,
-.amboss-form textarea:focus {
-    border-color: var(--amboss-green);
-}
-
-/* WhatsApp Center CTA */
-.center-cta {
-    position: absolute;
-    top: 60%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    z-index: 10;
-    transition: top 0.5s ease;
+.btn-unified:hover {
+    background: rgba(255, 255, 255, 0.12);
+    border-color: rgba(255, 255, 255, 0.7);
+    transform: translateY(-2px);
 }
 
 .btn-whatsapp {
     background: #25D366;
     color: #fff;
     font-weight: bold;
-    font-size: 1.1rem;
+    font-size: 1.05rem;
     padding: 1.2rem 3rem;
     border-radius: 50px;
     box-shadow: 0 10px 30px rgba(37, 211, 102, 0.2);
     border: none;
     text-decoration: none;
-    transition: all 0.3s ease;
+    transition: all 0.28s ease;
     display: inline-block;
     white-space: nowrap;
     text-transform: uppercase;
@@ -500,24 +536,125 @@ textarea:focus {
 .btn-whatsapp:hover {
     background: #1EBE5A;
     transform: translateY(-2px);
-    box-shadow: 0 10px 30px rgba(37, 211, 102, 0.4);
+    box-shadow: 0 12px 32px rgba(37, 211, 102, 0.4);
     color: #fff;
 }
 
-/* Footer */
+.mt-4 {
+    margin-top: 2rem;
+}
+
+/* ============================================================
+   SCROLL INDICATOR
+   ============================================================ */
+.scroll-indicator {
+    position: absolute;
+    bottom: 8rem;
+    left: 50%;
+    transform: translateX(-50%);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    opacity: 0.5;
+    animation: bounce 2.4s infinite;
+    z-index: 10;
+    pointer-events: none;
+}
+
+.scroll-indicator span {
+    font-size: 0.65rem;
+    letter-spacing: 3px;
+    margin-bottom: 10px;
+}
+
+.mouse {
+    width: 22px;
+    height: 34px;
+    border: 1.5px solid #fff;
+    border-radius: 11px;
+    position: relative;
+}
+
+.mouse::after {
+    content: '';
+    position: absolute;
+    top: 6px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 3px;
+    height: 7px;
+    background: #fff;
+    border-radius: 2px;
+    animation: scroll-dot 2.4s infinite;
+}
+
+@keyframes scroll-dot {
+    0%, 100% { opacity: 1; transform: translateX(-50%) translateY(0); }
+    50%       { opacity: 0.3; transform: translateX(-50%) translateY(8px); }
+}
+
+@keyframes bounce {
+    0%, 100% { transform: translate(-50%, 0); }
+    50%      { transform: translate(-50%, -6px); }
+}
+
+/* ============================================================
+   PROJECT CARDS
+   ============================================================ */
+.project-grid {
+    display: flex;
+    gap: 1.5rem;
+    width: 100%;
+}
+
+.project-card {
+    flex: 1;
+    position: relative;
+    border-radius: 10px;
+    overflow: hidden;
+    aspect-ratio: 3/4;
+    cursor: pointer;
+}
+
+.project-card img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.5s var(--t-ease);
+}
+
+.project-card:hover img {
+    transform: scale(1.06);
+}
+
+.card-info {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    padding: 1.5rem;
+    background: linear-gradient(transparent, rgba(0, 0, 0, 0.88));
+    font-size: 1rem;
+    letter-spacing: 1px;
+}
+
+/* ============================================================
+   FOOTER
+   ============================================================ */
 .global-footer {
     text-align: center;
     padding: 3rem;
     background: #050505;
-    color: rgba(255, 255, 255, 0.4);
-    font-size: 0.85rem;
+    color: rgba(255, 255, 255, 0.35);
+    font-size: 0.8rem;
     letter-spacing: 1px;
     position: relative;
     z-index: 10;
 }
 
-
-/* Controls */
+/* ============================================================
+   CONTROLS / SWITCHER
+   ============================================================ */
 .controls-wrapper {
     position: fixed;
     bottom: 2.5rem;
@@ -528,27 +665,27 @@ textarea:focus {
 
 .switcher {
     display: flex;
-    background: rgba(20, 20, 20, 0.4);
-    backdrop-filter: blur(15px);
-    -webkit-backdrop-filter: blur(15px);
+    background: rgba(14, 14, 14, 0.55);
+    backdrop-filter: blur(18px);
+    -webkit-backdrop-filter: blur(18px);
     border-radius: 50px;
     padding: 6px;
     position: relative;
     border: 1px solid rgba(255, 255, 255, 0.1);
-    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.6);
+    box-shadow: 0 20px 50px rgba(0, 0, 0, 0.7);
 }
 
 .switch-btn {
     background: transparent;
     border: none;
-    color: rgba(255, 255, 255, 0.6);
+    color: rgba(255, 255, 255, 0.5);
     padding: 1rem 1.8rem;
     font-family: var(--font-anta);
-    font-size: 0.85rem;
-    letter-spacing: 1px;
+    font-size: 0.82rem;
+    letter-spacing: 1.5px;
     cursor: pointer;
     z-index: 2;
-    transition: color 0.4s ease;
+    transition: color 0.3s ease;
     outline: none;
     position: relative;
 }
@@ -562,137 +699,100 @@ textarea:focus {
     top: 6px;
     left: 0;
     height: calc(100% - 12px);
-    background: rgba(255, 255, 255, 0.15);
+    background: rgba(255, 255, 255, 0.13);
     border-radius: 50px;
     z-index: 1;
-    transition: all 0.5s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+    transition: all 0.45s cubic-bezier(0.68, -0.4, 0.265, 1.4);
 }
 
-/* Media/* Hover expands the panel slightly */
+/* ============================================================
+   HOVER — subtle panel expansion
+   ============================================================ */
 @media (prefers-reduced-motion: no-preference) {
     .page-wrapper.is-split .panel-left:hover {
-        flex: 1.05;
+        flex: 1.08;
     }
 
     .page-wrapper.is-split .panel-right:hover {
-        flex: 1.05;
+        flex: 1.08;
     }
 
     .page-wrapper.is-split .panel-left:hover .panel-bg {
-        transform: scale(1.02);
+        transform: translateZ(0) scale(1.03);
     }
 
     .page-wrapper.is-split .panel-right:hover .panel-bg {
-        transform: scale(1.02);
+        transform: translateZ(0) scale(1.03);
+    }
+
+    /* Widen accent line on hover */
+    .panel-left:hover .brand-accent-line {
+        width: 80px;
+    }
+
+    .panel-right:hover .brand-accent-line {
+        width: 80px;
     }
 }
 
-/* 
-   State Management (Triggered on .page-wrapper) 
-   These rules apply to ALL .split-section children inside .page-wrapper
-*/
+/* ============================================================
+   STATE MANAGEMENT
+   ============================================================ */
 
-/* State - LIIT Full */
+/* --- LIIT Full --- */
 .page-wrapper.is-liit .split-section .panel-left {
     flex: 100;
-    border-right-color: transparent;
 }
 
 .page-wrapper.is-liit .split-section .panel-right {
     flex: 0;
 }
 
-.page-wrapper.is-liit .split-section .panel-right .panel-content {
+.page-wrapper.is-liit .split-section .panel-right .panel-content,
+.page-wrapper.is-liit .split-section .panel-right .panel-inner-content,
+.page-wrapper.is-liit .split-section .panel-right .panel-brand-identity {
     opacity: 0;
     transform: scale(0.95);
     transition-delay: 0s;
 }
 
-.page-wrapper.is-liit .split-section .panel-left .panel-content {
-    transition-delay: 0.3s;
+.page-wrapper.is-liit .split-section .panel-left .panel-content,
+.page-wrapper.is-liit .split-section .panel-left .panel-inner-content,
+.page-wrapper.is-liit .split-section .panel-left .panel-brand-identity {
+    transition-delay: 0.25s;
 }
 
-/* State - AMBOSS Full */
+
+/* --- AMBOSS Full --- */
 .page-wrapper.is-amboss .split-section .panel-left {
     flex: 0;
-    border-right-color: transparent;
 }
 
 .page-wrapper.is-amboss .split-section .panel-right {
     flex: 100;
 }
 
-.page-wrapper.is-amboss .split-section .panel-left .panel-content {
+.page-wrapper.is-amboss .split-section .panel-left .panel-content,
+.page-wrapper.is-amboss .split-section .panel-left .panel-inner-content,
+.page-wrapper.is-amboss .split-section .panel-left .panel-brand-identity {
     opacity: 0;
     transform: scale(0.95);
     transition-delay: 0s;
 }
 
-.page-wrapper.is-amboss .split-section .panel-right .panel-content {
-    transition-delay: 0.3s;
+.page-wrapper.is-amboss .split-section .panel-right .panel-content,
+.page-wrapper.is-amboss .split-section .panel-right .panel-inner-content,
+.page-wrapper.is-amboss .split-section .panel-right .panel-brand-identity {
+    transition-delay: 0.25s;
 }
 
-/* ==========================================================================
-   SIMULATOR LAYOUT & SPECIFICS
-   ========================================================================== */
 
-/* Unified Content */
-.unified-content {
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    z-index: 10;
-    text-align: center;
-    width: 100%;
-    max-width: 800px;
-    padding: 2rem;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    pointer-events: none;
-}
-
-.unified-content > * {
-    pointer-events: auto;
-}
-
-.unified-top {
-    top: 15%;
-    transform: translate(-50%, 0);
-}
-
-.btn-unified {
-    padding: 1.2rem 3rem;
-    text-decoration: none;
-    font-size: 0.95rem;
-    letter-spacing: 2px;
-    text-transform: uppercase;
-    transition: all 0.3s ease;
-    border-radius: 50px;
-    cursor: pointer;
-    color: #fff;
-    border: 1px solid rgba(255, 255, 255, 0.4);
-    background: transparent;
-    display: inline-block;
-}
-
-.btn-unified:hover {
-    background: #fff;
-    color: var(--amboss-black);
-    transform: translateY(-2px);
-    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
-}
-
-.mt-4 {
-    margin-top: 2rem;
-}
-
+/* ============================================================
+   SIMULATOR STYLES
+   ============================================================ */
 .simulator-page {
     overflow-y: auto;
     scroll-snap-type: none;
-    /* Disable scroll snapping on simulator */
     background-color: #0b0b0b;
 }
 
@@ -744,7 +844,6 @@ textarea:focus {
     text-transform: uppercase;
 }
 
-/* Layout Grid */
 .simulator-layout {
     display: flex;
     max-width: 1200px;
@@ -772,8 +871,6 @@ textarea:focus {
     box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
 }
 
-
-/* Control Groups & Steps */
 .step-indicator {
     font-size: 0.9rem;
     color: var(--liit-accent);
@@ -787,7 +884,7 @@ textarea:focus {
 
 .step-container {
     display: none;
-    animation: fadeInStep 0.4s ease forwards;
+    animation: fadeInStep 0.35s ease forwards;
 }
 
 .step-container.active-step {
@@ -795,15 +892,8 @@ textarea:focus {
 }
 
 @keyframes fadeInStep {
-    from {
-        opacity: 0;
-        transform: translateY(10px);
-    }
-
-    to {
-        opacity: 1;
-        transform: translateY(0);
-    }
+    from { opacity: 0; transform: translateY(8px); }
+    to   { opacity: 1; transform: translateY(0); }
 }
 
 .sim-group {
@@ -825,7 +915,7 @@ textarea:focus {
     letter-spacing: 2px;
     border-radius: 50px;
     cursor: pointer;
-    transition: all 0.3s ease;
+    transition: all 0.28s ease;
     border: none;
 }
 
@@ -834,11 +924,10 @@ textarea:focus {
     color: #111;
     font-weight: bold;
     margin-left: auto;
-    /* Push to right if previous is hidden */
 }
 
 .step-navigation .btn-primary:hover {
-    background: rgba(255, 255, 255, 0.8);
+    background: rgba(255, 255, 255, 0.85);
     transform: translateY(-2px);
     box-shadow: 0 5px 15px rgba(255, 255, 255, 0.1);
 }
@@ -864,15 +953,12 @@ textarea:focus {
     border-bottom: 1px solid rgba(255, 255, 255, 0.1);
 }
 
-/* Options Grid / Cards */
 .options-grid {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
     gap: 1.5rem;
 }
 
-
-/* Hide default radio buttons */
 .sim-card input[type="radio"] {
     display: none;
 }
@@ -883,7 +969,7 @@ textarea:focus {
     border-radius: 8px;
     padding: 1.5rem;
     cursor: pointer;
-    transition: all 0.3s ease;
+    transition: all 0.28s ease;
     height: 100%;
     display: flex;
     flex-direction: column;
@@ -902,26 +988,21 @@ textarea:focus {
     line-height: 1.5;
 }
 
-/* Hover States */
 .sim-card:hover .card-content {
     background: rgba(255, 255, 255, 0.08);
     border-color: rgba(255, 255, 255, 0.2);
 }
 
-/* Selected States using Brand Colors mixed */
 .project-types input[type="radio"]:checked+.card-content {
     background: rgba(77, 31, 46, 0.15);
-    /* LIIT Maroon Tint */
     border-color: var(--liit-primary);
 }
 
 .finish-types input[type="radio"]:checked+.card-content {
     background: rgba(30, 227, 111, 0.05);
-    /* AMBOSS Green Tint */
     border-color: var(--amboss-green);
 }
 
-/* Area Slider */
 .range-container {
     display: flex;
     align-items: center;
@@ -934,7 +1015,7 @@ input[type="range"] {
     -webkit-appearance: none;
     appearance: none;
     width: 100%;
-    height: 6px;
+    height: 5px;
     background: rgba(255, 255, 255, 0.1);
     border-radius: 5px;
     outline: none;
@@ -967,7 +1048,6 @@ input[type="range"]::-webkit-slider-thumb:hover {
     text-align: right;
 }
 
-/* Special Add-ons (Toggles) */
 .toggle-list {
     display: flex;
     flex-direction: column;
@@ -983,7 +1063,7 @@ input[type="range"]::-webkit-slider-thumb:hover {
     border: 1px solid rgba(255, 255, 255, 0.05);
     border-radius: 8px;
     cursor: pointer;
-    transition: background 0.3s;
+    transition: background 0.28s;
 }
 
 .toggle-item:hover {
@@ -1001,7 +1081,6 @@ input[type="range"]::-webkit-slider-thumb:hover {
     opacity: 0.6;
 }
 
-/* Toggle Switch CSS */
 .toggle-switch {
     position: relative;
     display: inline-block;
@@ -1018,12 +1097,9 @@ input[type="range"]::-webkit-slider-thumb:hover {
 .slider {
     position: absolute;
     cursor: pointer;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
+    top: 0; left: 0; right: 0; bottom: 0;
     background-color: rgba(255, 255, 255, 0.1);
-    transition: .4s;
+    transition: .35s;
 }
 
 .slider:before {
@@ -1034,12 +1110,11 @@ input[type="range"]::-webkit-slider-thumb:hover {
     left: 4px;
     bottom: 4px;
     background-color: white;
-    transition: .4s;
+    transition: .35s;
 }
 
 .toggle-switch input:checked+.slider {
     background-color: var(--liit-accent);
-    /* Neutral Moss Green */
 }
 
 .toggle-switch input:focus+.slider {
@@ -1050,15 +1125,9 @@ input[type="range"]::-webkit-slider-thumb:hover {
     transform: translateX(22px);
 }
 
-.slider.round {
-    border-radius: 34px;
-}
+.slider.round { border-radius: 34px; }
+.slider.round:before { border-radius: 50%; }
 
-.slider.round:before {
-    border-radius: 50%;
-}
-
-/* Summary Panel Internals */
 .summary-panel h2 {
     font-size: 1.2rem;
     text-transform: uppercase;
@@ -1100,7 +1169,6 @@ input[type="range"]::-webkit-slider-thumb:hover {
     margin: 0.5rem 0;
 }
 
-/* Button override for uniform styling */
 .btn-quote {
     display: block;
     text-align: center;
@@ -1113,11 +1181,11 @@ input[type="range"]::-webkit-slider-thumb:hover {
     letter-spacing: 2px;
     padding: 1.2rem 3rem;
     border-radius: 50px;
-    transition: all 0.3s ease;
+    transition: all 0.28s ease;
 }
 
 .btn-quote:hover {
-    background: rgba(255, 255, 255, 0.8);
+    background: rgba(255, 255, 255, 0.85);
     transform: translateY(-2px);
     box-shadow: 0 10px 20px rgba(255, 255, 255, 0.1);
 }
@@ -1127,7 +1195,9 @@ input[type="range"]::-webkit-slider-thumb:hover {
     background: #0b0b0b;
 }
 
-/* Responsive Simulator */
+/* ============================================================
+   RESPONSIVE — Simulator
+   ============================================================ */
 @media (max-width: 900px) {
     .simulator-layout {
         flex-direction: column;
